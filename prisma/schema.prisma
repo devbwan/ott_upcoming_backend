@@ -1,0 +1,28 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// OTT 공개 예정작 데이터 모델 (MongoDB 스키마)
+model UpcomingWork {
+  id            Int      @id @map("_id") // TMDB ID (MongoDB의 Primary Key로 매핑)
+  title         String
+  originalTitle String
+  mediaType     String   // "movie" 또는 "tv"
+  overview      String
+  posterPath    String?
+  backdropPath  String?
+  releaseDate   DateTime // 한국 기준 공개 날짜 (YYYY-MM-DD)
+  releaseTime   String   // 표준화된 공개 시간 (예: "17:00:00" 또는 "00:00:00")
+  popularity    Float
+  voteAverage   Float
+  providers     Json     // MongoDB 네이티브 JSON 지원: [{ provider_id: number, provider_name: string, logo_path: string }]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([releaseDate])
+}
